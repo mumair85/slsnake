@@ -79,7 +79,7 @@ namespace SLSnake.Elements
             this.Clip = _FrameAnim_RectangleGeometry;
             this.Height = 24;
             this.Width = 24;
-            this.CacheMode = new BitmapCache();
+            //this.CacheMode = new BitmapCache();
 
             //准备 FrameAnimation StoryBoard
 
