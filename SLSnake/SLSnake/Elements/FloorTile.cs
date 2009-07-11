@@ -20,7 +20,7 @@ namespace SLSnake.Elements
 
         private static ImageBrush _ImageBrush = new ImageBrush()
         {
-            ImageSource = new BitmapImage(new Uri(@"Images/floor.png", UriKind.Relative)),
+            ImageSource = new BitmapImage(new Uri(@"/Images/floor.png", UriKind.Relative)),
             AlignmentX = AlignmentX.Left,
             AlignmentY = AlignmentY.Top,
             Stretch = Stretch.UniformToFill
