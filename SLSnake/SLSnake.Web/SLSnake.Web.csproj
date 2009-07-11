@@ -11,7 +11,8 @@
     <RootNamespace>SLSnake.Web</RootNamespace>
     <AssemblyName>SLSnake.Web</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <SilverlightApplicationList>{3402281B-D55B-495F-A87D-F1D0D313807B}|..\SLSnake\SLSnake.csproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,7 +55,6 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClientBin\SLSnake.xap" />
     <Content Include="Default.aspx" />
     <Content Include="Silverlight.js" />
     <Content Include="SLSnakeTestPage.aspx" />
