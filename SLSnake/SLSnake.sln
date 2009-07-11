@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLSnake", "SLSnake\SLSnake.csproj", "{3402281B-D55B-495F-A87D-F1D0D313807B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLSnake.Web", "SLSnake.Web\SLSnake.Web.csproj", "{D345EB0D-2CCE-445E-9CE3-D36279653E46}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3402281B-D55B-495F-A87D-F1D0D313807B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3402281B-D55B-495F-A87D-F1D0D313807B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3402281B-D55B-495F-A87D-F1D0D313807B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3402281B-D55B-495F-A87D-F1D0D313807B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D345EB0D-2CCE-445E-9CE3-D36279653E46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D345EB0D-2CCE-445E-9CE3-D36279653E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D345EB0D-2CCE-445E-9CE3-D36279653E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D345EB0D-2CCE-445E-9CE3-D36279653E46}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
