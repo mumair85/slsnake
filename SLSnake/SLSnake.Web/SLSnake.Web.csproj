@@ -11,8 +11,7 @@
     <RootNamespace>SLSnake.Web</RootNamespace>
     <AssemblyName>SLSnake.Web</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <SilverlightApplicationList>
-    </SilverlightApplicationList>
+    <SilverlightApplicationList>{3402281B-D55B-495F-A87D-F1D0D313807B}|..\SLSnake\SLSnake.csproj|ClientBin|False</SilverlightApplicationList>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
