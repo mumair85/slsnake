@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Diagnostics;
 
 namespace SLSnake
 {
@@ -33,6 +34,11 @@ namespace SLSnake
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
+        }
+
+        ~ErrorWindow()
+        {
+            Debug.WriteLine("disposed");
         }
     }
 }
