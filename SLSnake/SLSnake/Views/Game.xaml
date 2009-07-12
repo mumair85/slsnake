@@ -6,10 +6,7 @@
     mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
     Title="About" 
     Style="{StaticResource PageStyle}">
-
-    <Canvas x:Name="LayoutRoot" Width="300" Height="300" Background="Yellow">
-        <TextBox Canvas.Left="57" Canvas.Top="121"></TextBox>
-        <Image x:Name="_img" Height="24" Width="24" Canvas.Left="57" Canvas.Top="61" Source="/SLSnake;Component/Images/floor.png" Stretch="Fill"/>
+    
+    <Canvas x:Name="LayoutRoot" Width="960" Height="600">
     </Canvas>
-
 </navigation:Page>
