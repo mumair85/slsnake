@@ -41,6 +41,5 @@ namespace SLSnake.Elements
                 return 1;
             }
         }
-
     }
 }
