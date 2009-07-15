@@ -54,7 +54,7 @@ namespace SLSnake
         void Game_Loaded(object sender, RoutedEventArgs e)
         {
             #region GameLogic Init
-            _h = new GameLoopHandler(this.LayoutRoot);
+            _h = new GameLoopHandler(this.LayoutRoot, this._floor_canvas, this._food_canvas, this._snake_canvas);
             if (_h.Init()) return;
             #endregion
 
@@ -131,14 +131,18 @@ namespace SLSnake
     public class GameLoopHandler : IGameLoopHandler
     {
         #region Constructor
-        public GameLoopHandler(Canvas canvas)
+        public GameLoopHandler(Canvas baseCanvas, Canvas floorCanvas, Canvas foodCanvas, Canvas snakeCanvas)
         {
-            this.BaseCanvas = canvas;
-            canvas.KeyDown += new KeyEventHandler(canvas_KeyDown);
-            canvas.KeyUp += new KeyEventHandler(canvas_KeyUp);
-            canvas.MouseLeftButtonDown += new MouseButtonEventHandler(canvas_MouseLeftButtonDown);
-            canvas.MouseLeftButtonUp += new MouseButtonEventHandler(canvas_MouseLeftButtonUp);
-            canvas.MouseMove += new MouseEventHandler(canvas_MouseMove);
+            this.BaseCanvas = baseCanvas;
+            this.FloorCanvas = floorCanvas;
+            this.FoodCanvas = foodCanvas;
+            this.SnakeCanvas = snakeCanvas;
+
+            this.BaseCanvas.KeyDown += new KeyEventHandler(canvas_KeyDown);
+            this.BaseCanvas.KeyUp += new KeyEventHandler(canvas_KeyUp);
+            this.BaseCanvas.MouseLeftButtonDown += new MouseButtonEventHandler(canvas_MouseLeftButtonDown);
+            this.BaseCanvas.MouseLeftButtonUp += new MouseButtonEventHandler(canvas_MouseLeftButtonUp);
+            this.BaseCanvas.MouseMove += new MouseEventHandler(canvas_MouseMove);
         }
         #endregion
 
@@ -174,6 +178,9 @@ namespace SLSnake
         #region Properties
 
         public Canvas BaseCanvas { get; private set; }
+        public Canvas FloorCanvas { get; private set; }
+        public Canvas FoodCanvas { get; private set; }
+        public Canvas SnakeCanvas { get; private set; }
 
         public short MapWidth { get; private set; }
         public short MapHeight { get; private set; }
@@ -333,7 +340,7 @@ namespace SLSnake
                     _spaces.Add(new Location { X = i, Y = j });
 
             // grow foods
-            Grow(100);
+            Grow(1000);
 
             return false;
         }
@@ -349,7 +356,7 @@ namespace SLSnake
             {
                 foreach (var location in _spaces)
                 {
-                    _foods.Add(new FoodTile(_h.BaseCanvas) { Location = location });
+                    _foods.Add(new FoodTile(_h.FoodCanvas) { Location = location });
                 }
                 _spaces.Clear();
             }
@@ -360,7 +367,7 @@ namespace SLSnake
                     var idx = _rnd.Next(_spaces.Count);
                     var location = _spaces[idx];
                     _spaces.RemoveAt(idx);
-                    _foods.Add(new FoodTile(_h.BaseCanvas) { Location = location });
+                    _foods.Add(new FoodTile(_h.FoodCanvas) { Location = location });
                 }
             }
         }
@@ -371,8 +378,17 @@ namespace SLSnake
         public void Eat(FoodTile food)
         {
             _spaces.Add(food.Location);
-            _h.BaseCanvas.Children.Remove(food);
+            _h.FoodCanvas.Children.Remove(food);
             _foods.Remove(food);
+        }
+
+        /// <summary>
+        /// 判断一个坐标点是否有食物并返回
+        /// </summary>
+        public FoodTile Get(Location location)
+        {
+            foreach (var food in _foods) if (food.Location == location) return food;
+            return null;
         }
 
         /// <summary>
@@ -431,7 +447,7 @@ namespace SLSnake
             {
                 for (short j = 0; j < _h.MapHeight; j++)
                 {
-                    var f = new FloorTile(_h.BaseCanvas) { X = i, Y = j };
+                    var f = new FloorTile(_h.FloorCanvas) { X = i, Y = j };
                     if (i == 0 || j == 0 || i == _h.MapWidth - 1 || j == _h.MapHeight - 1)
                     {
                         f.Opacity = 1;
@@ -446,7 +462,7 @@ namespace SLSnake
         public bool Process()
         {
             // todo
-            //if (_wall.Any(o => { return o.XY == ?.XY; }))
+            //if (_wall.Any(o => { return o.Location == ?.Location; }))
             //{
             // return true;
             //}

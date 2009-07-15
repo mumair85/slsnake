@@ -30,12 +30,46 @@ namespace SLSnake.Elements
     [StructLayout(LayoutKind.Explicit, Size = 4, CharSet = CharSet.Ansi)]
     public struct Location
     {
+        /// <summary>
+        /// 横坐标+纵坐标 (4 bytes)
+        /// </summary>
         [FieldOffset(0)]
         public uint XY;
+
+        /// <summary>
+        /// 横坐标 (2 bytes)
+        /// </summary>
         [FieldOffset(0)]
         public short X;
+
+        /// <summary>
+        /// 纵坐标 (2 bytes)
+        /// </summary>
         [FieldOffset(2)]
         public short Y;
+
+        #region override operator
+        public static implicit operator Location(uint i)
+        {
+            return new Location { XY = i };
+        }
+        public static bool operator ==(Location a, Location b)
+        {
+            return a.XY.Equals(b.XY);
+        }
+        public static bool operator !=(Location a, Location b)
+        {
+            return !a.XY.Equals(b.XY);
+        }
+        public override int GetHashCode()
+        {
+            return (int)this.XY;
+        }
+        public override bool Equals(object obj)
+        {
+            return this.XY.Equals(((Location)obj).XY);
+        }
+        #endregion
     }
 
     /// <summary>
@@ -94,7 +128,6 @@ namespace SLSnake.Elements
             this.Clip = _FrameAnim_RectangleGeometry;
             this.Height = 24;
             this.Width = 24;
-            //this.CacheMode = new BitmapCache();
 
             //准备 FrameAnimation StoryBoard
 
