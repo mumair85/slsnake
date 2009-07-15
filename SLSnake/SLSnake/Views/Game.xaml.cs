@@ -130,88 +130,119 @@ namespace SLSnake
     {
         public GameLogic(Canvas canvas)
         {
-            _canvas = canvas;
+            this.BaseCanvas = canvas;
+            this.MapWidth = 40;
+            this.MapHeight = 25;
         }
-
 
         public bool Init()
         {
-            _width = 40;
-            _height = 25;
-
-            // 初始化地板
-
-            for (int i = 0; i < _width; i++)
-            {
-                for (int j = 0; j < _height; j++)
-                {
-                    var f = new FloorTile(_canvas) { X = i, Y = j, Opacity = ((i == 0 || j == 0 || i == _width - 1 || j == _height - 1) ? 1 : 0.05) };
-                }
-            }
-
+            this.Floor = new Floor(this);
+            this.Snake = new Snake(this);
+            this.Food = new Food(this);
 
             return false;
         }
 
         public bool Process()
         {
+            this.Snake.Process();
+            this.Food.Process();
+            this.Floor.Process();
+
             return false;
         }
 
-        private Random _rnd = new Random(Environment.TickCount);
-        private Canvas _canvas;
-        List<FloorTile> _floors = new List<FloorTile>();
+        public Canvas BaseCanvas { get; private set; }
+        public int MapWidth { get; private set; }
+        public int MapHeight { get; private set; }
 
-        private int _width;
-        private int _height;
+        public Snake Snake { get; private set; }
+        public Food Food { get; private set; }
+        public Floor Floor { get; private set; }
+    }
 
-        protected int GridWidth
+    public partial class Snake : IGameLoopHandler
+    {
+        private GameLogic _gl;
+
+        public Snake(GameLogic gl)
         {
-            get { return _width; }
-            set { _width = value; }
-        }
-        protected int GridHeight
-        {
-            get { return _height; }
-            set { _height = value; }
-        }
-        public List<FloorTile> Floors
-        {
-            get { return _floors; }
-            set { _floors = value; }
+            _gl = gl;
         }
 
-        //List<RoadBreak> _roadbreaks = new List<RoadBreak>();
+        public bool Init()
+        {
+            // todo
+            return false;
+        }
 
-        //public List<RoadBreak> RoadBreaks
-        //{
-        //    get { return _roadbreaks; }
-        //    set { _roadbreaks = value; }
-        //}
+        public bool Process()
+        {
+            // todo
+            return false;
+        }
+    }
 
-        //List<Body> _bodies = new List<Body>();
+    public partial class Food : IGameLoopHandler
+    {
+        private GameLogic _gl;
 
-        //public List<Body> Bodies
-        //{
-        //    get { return _bodies; }
-        //    set { _bodies = value; }
-        //}
+        public Food(GameLogic gl)
+        {
+            _gl = gl;
+        }
 
-        //List<Food> _foods = new List<Food>();
+        public bool Init()
+        {
+            // todo
+            return false;
+        }
 
-        //public List<Food> Foods
-        //{
-        //    get { return _foods; }
-        //    set { _foods = value; }
-        //}
+        public bool Process()
+        {
+            // todo
+            return false;
+        }
+    }
 
-        //public Game(Canvas baseCanvas)
-        //{
-        //    _baseCanvas = baseCanvas;
+    public partial class Floor : IGameLoopHandler
+    {
+        private GameLogic _gl;
+        private List<Tile> _wall = new List<Tile>();
 
-        //    Init();
-        //}
+        public Floor(GameLogic gl)
+        {
+            _gl = gl;
+        }
 
+        public bool Init()
+        {
+            // 初始化地板
+            for (int i = 0; i < _gl.MapWidth; i++)
+            {
+                for (int j = 0; j < _gl.MapHeight; j++)
+                {
+                    var f = new FloorTile(_gl.BaseCanvas) { X = i, Y = j };
+                    if (i == 0 || j == 0 || i == _gl.MapWidth - 1 || j == _gl.MapHeight - 1)
+                    {
+                        f.Opacity = 1;
+                        _wall.Add(f);
+                    }
+                    else f.Opacity = 0.05;
+                }
+            }
+            return false;
+        }
 
+        public bool Process()
+        {
+            // todo
+            //if (_wall.Any(o => { return o.X == ?.X && o.Y == ?.Y; }))
+            //{
+            // return true;
+            //}
+            return false;
+        }
     }
 }
