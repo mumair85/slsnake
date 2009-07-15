@@ -175,8 +175,8 @@ namespace SLSnake
 
         public Canvas BaseCanvas { get; private set; }
 
-        public int MapWidth { get; private set; }
-        public int MapHeight { get; private set; }
+        public short MapWidth { get; private set; }
+        public short MapHeight { get; private set; }
 
         public Snake Snake { get; private set; }
         public Food Food { get; private set; }
@@ -189,8 +189,8 @@ namespace SLSnake
         public bool IsSpaceKeyDown { get; private set; }
         public bool IsMouseLeftKeyDown { get; private set; }
         public Point MousePosition { get; private set; }
-        public int MouseGridPositionY { get; private set; }
-        public int MouseGridPositionX { get; private set; }
+        public short MouseGridPositionY { get; private set; }
+        public short MouseGridPositionX { get; private set; }
 
         #endregion
 
@@ -234,8 +234,8 @@ namespace SLSnake
             MousePosition = e.GetPosition(BaseCanvas);
 
             // 将鼠标位置换算为格子坐标
-            MouseGridPositionX = (int)MousePosition.X / MapWidth;
-            MouseGridPositionY = (int)MousePosition.Y / MapHeight;
+            MouseGridPositionX = (short)(MousePosition.X / MapWidth);
+            MouseGridPositionY = (short)(MousePosition.Y / MapHeight);
         }
         #endregion
     }
@@ -321,31 +321,58 @@ namespace SLSnake
             _h = gl;
         }
 
-        private List<Tile> _foods = new List<Tile>();
-        private List<Location> _emptys = new List<Location>();
+        private List<FoodTile> _foods = new List<FoodTile>();
+        private List<Location> _spaces = new List<Location>();
+        private Random _rnd = new Random(Environment.TickCount);
 
         public bool Init()
         {
             // register empty locations
             for (short i = 1; i < _h.MapWidth - 1; i++)
                 for (short j = 1; j < _h.MapHeight - 1; j++)
-                    _emptys.Add(new Location { X = i, Y = j });
+                    _spaces.Add(new Location { X = i, Y = j });
 
-            // todo : create foods
-            Grow(3, 5);
-            Grow(7, 7);
+            // grow foods
+            Grow(100);
 
             return false;
         }
 
         /// <summary>
-        /// 生出一个食物并返回（同步empty locations）
+        /// 随机生出 num 个食物（同步 _spaces）
         /// </summary>
-        public FoodTile Grow(short x, short y)
+        public void Grow(int num)
         {
-            var food = new FoodTile(_h.BaseCanvas) { X = x, Y = y };
-            _foods.Add(food);
-            return food;
+            // todo: 避开蛇身
+
+            if (num > _spaces.Count)
+            {
+                foreach (var location in _spaces)
+                {
+                    _foods.Add(new FoodTile(_h.BaseCanvas) { Location = location });
+                }
+                _spaces.Clear();
+            }
+            else
+            {
+                for (int i = 0; i < num; i++)
+                {
+                    var idx = _rnd.Next(_spaces.Count);
+                    var location = _spaces[idx];
+                    _spaces.RemoveAt(idx);
+                    _foods.Add(new FoodTile(_h.BaseCanvas) { Location = location });
+                }
+            }
+        }
+
+        /// <summary>
+        /// 吃掉一个食物（同步 _spaces)
+        /// </summary>
+        public void Eat(FoodTile food)
+        {
+            _spaces.Add(food.Location);
+            _h.BaseCanvas.Children.Remove(food);
+            _foods.Remove(food);
         }
 
         /// <summary>
