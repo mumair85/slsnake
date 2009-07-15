@@ -38,7 +38,7 @@ namespace SLSnake.Elements
         {
             get
             {
-                return 1;
+                return this.Y + 200;
             }
         }
 
