@@ -16,6 +16,8 @@ namespace SLSnake
     {
         public App()
         {
+            Host.Settings.MaxFrameRate = 1000;
+
             this.Startup += this.Application_Startup;
             this.UnhandledException += this.Application_UnhandledException;
 
