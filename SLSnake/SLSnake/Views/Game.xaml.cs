@@ -267,6 +267,7 @@ namespace SLSnake
             Up, Down, Left, Right
         }
 
+        #region Move
         public void Move()
         {
             if (_h.IsLeftKeyDown && _h.IsUpKeyDown)
@@ -307,6 +308,7 @@ namespace SLSnake
             //// 前进
             //this.前进();
         }
+        #endregion
     }
     #endregion
 
@@ -314,22 +316,37 @@ namespace SLSnake
     public partial class Food : IGameLoopHandler
     {
         private GameLoopHandler _h;
-
         public Food(GameLoopHandler gl)
         {
             _h = gl;
         }
 
+        private List<Tile> _foods = new List<Tile>();
+        private List<Location> _emptys = new List<Location>();
+
         public bool Init()
         {
+            // register empty locations
+            for (short i = 1; i < _h.MapWidth - 1; i++)
+                for (short j = 1; j < _h.MapHeight - 1; j++)
+                    _emptys.Add(new Location { X = i, Y = j });
+
             // todo : create foods
-            _foods.Add(new FoodTile(_h.BaseCanvas) { X = 3, Y = 5 });
-            _foods.Add(new FoodTile(_h.BaseCanvas) { X = 7, Y = 7 });
+            Grow(3, 5);
+            Grow(7, 7);
 
             return false;
         }
 
-        private List<Tile> _foods = new List<Tile>();
+        /// <summary>
+        /// 生出一个食物并返回（同步empty locations）
+        /// </summary>
+        public FoodTile Grow(short x, short y)
+        {
+            var food = new FoodTile(_h.BaseCanvas) { X = x, Y = y };
+            _foods.Add(food);
+            return food;
+        }
 
         /// <summary>
         /// 原地转圈
@@ -383,9 +400,9 @@ namespace SLSnake
         public bool Init()
         {
             // 初始化 地板 和 墙
-            for (int i = 0; i < _h.MapWidth; i++)
+            for (short i = 0; i < _h.MapWidth; i++)
             {
-                for (int j = 0; j < _h.MapHeight; j++)
+                for (short j = 0; j < _h.MapHeight; j++)
                 {
                     var f = new FloorTile(_h.BaseCanvas) { X = i, Y = j };
                     if (i == 0 || j == 0 || i == _h.MapWidth - 1 || j == _h.MapHeight - 1)
@@ -402,7 +419,7 @@ namespace SLSnake
         public bool Process()
         {
             // todo
-            //if (_wall.Any(o => { return o.X == ?.X && o.Y == ?.Y; }))
+            //if (_wall.Any(o => { return o.XY == ?.XY; }))
             //{
             // return true;
             //}

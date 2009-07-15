@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Runtime.InteropServices;
 
 namespace SLSnake.Elements
 {
@@ -21,6 +22,20 @@ namespace SLSnake.Elements
         LeftTop, Top, RightTop,
         Left, Right,
         LeftBottom, Bottom, RightBottom
+    }
+
+    /// <summary>
+    /// 表示一个地图的整数坐标 X, Y
+    /// </summary>
+    [StructLayout(LayoutKind.Explicit, Size = 4, CharSet = CharSet.Ansi)]
+    public struct Location
+    {
+        [FieldOffset(0)]
+        public uint XY;
+        [FieldOffset(0)]
+        public short X;
+        [FieldOffset(2)]
+        public short Y;
     }
 
     /// <summary>
@@ -210,8 +225,8 @@ namespace SLSnake.Elements
 
         #region Actions
 
-        protected int _x = 0;
-        public int X
+        protected short _x = 0;
+        public short X
         {
             get { return _x; }
             set
@@ -220,8 +235,8 @@ namespace SLSnake.Elements
                 Canvas.SetLeft(this, _x * 24);
             }
         }
-        protected int _y = 0;
-        public int Y
+        protected short _y = 0;
+        public short Y
         {
             get { return _y; }
             set
@@ -233,6 +248,14 @@ namespace SLSnake.Elements
         }
 
         public virtual int Z { get; set; }
+
+        public Location XY
+        {
+            get
+            {
+                return new Location { X = this.X, Y = this.Y };
+            }
+        }
 
 
         /// <summary>
