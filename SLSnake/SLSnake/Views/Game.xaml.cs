@@ -141,6 +141,10 @@ namespace SLSnake
             this.Snake = new Snake(this);
             this.Food = new Food(this);
 
+            this.Floor.Init();
+            this.Snake.Init();
+            this.Food.Init();
+
             return false;
         }
 
@@ -195,15 +199,50 @@ namespace SLSnake
 
         public bool Init()
         {
-            // todo
+            // todo : create foods
+            _foods.Add(new FoodTile(_gl.BaseCanvas) { X = 3, Y = 5 });
+            _foods.Add(new FoodTile(_gl.BaseCanvas) { X = 7, Y = 7 });
+
             return false;
         }
 
+        private List<Tile> _foods = new List<Tile>();
+
+        /// <summary>
+        /// 原地转圈
+        /// </summary>
         public bool Process()
         {
-            // todo
+            CmdCounter = 0;									//复位指令计数器
+
+            if (ChangeOrientation(TileOrientations.Bottom)) return false;
+            if (ChangeOrientation(TileOrientations.LeftBottom)) return false;
+            if (ChangeOrientation(TileOrientations.Left)) return false;
+            if (ChangeOrientation(TileOrientations.LeftTop)) return false;
+            if (ChangeOrientation(TileOrientations.Top)) return false;
+            if (ChangeOrientation(TileOrientations.RightTop)) return false;
+            if (ChangeOrientation(TileOrientations.Right)) return false;
+            if (ChangeOrientation(TileOrientations.RightBottom)) return false;
+
+            CmdPoint = 1;									//跳转到第一条指令
+
             return false;
         }
+
+        int CmdCounter, CmdPoint = 1;
+
+        public bool ChangeOrientation(TileOrientations o)
+        {
+            if (++CmdCounter != CmdPoint) return false;		//自增编号，并判断是否执行当前方法，不执行则返回 false
+            CmdPoint = CmdCounter + 1;
+
+
+            foreach (var food in _foods) food.Orientation = o;
+
+
+            return true;									//退出指令序列
+        }
+
     }
 
     public partial class Floor : IGameLoopHandler
