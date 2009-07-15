@@ -225,35 +225,41 @@ namespace SLSnake.Elements
 
         #region Actions
 
-        protected short _x = 0;
         public short X
         {
-            get { return _x; }
+            get { return _location.X; }
             set
             {
-                _x = value;
-                Canvas.SetLeft(this, _x * 24);
+                _location.X = value;
+                Canvas.SetLeft(this, _location.X * 24);
             }
         }
-        protected short _y = 0;
         public short Y
         {
-            get { return _y; }
+            get { return _location.Y; }
             set
             {
-                _y = value;
-                Canvas.SetTop(this, _y * 24);
+                _location.Y = value;
+                Canvas.SetTop(this, _location.Y * 24);
                 Canvas.SetZIndex(this, value);
             }
         }
 
         public virtual int Z { get; set; }
 
-        public Location XY
+        protected Location _location;
+        public Location Location
         {
             get
             {
-                return new Location { X = this.X, Y = this.Y };
+                return _location;
+            }
+            set
+            {
+                _location = value;
+                Canvas.SetLeft(this, _location.X * 24);
+                Canvas.SetTop(this, _location.Y * 24);
+                Canvas.SetZIndex(this, _location.Y);
             }
         }
 
@@ -261,82 +267,82 @@ namespace SLSnake.Elements
         /// <summary>
         /// 如果已经移到 x,y 则返回 true 否则移动１格并返回 false	//todo:寻路
         /// </summary>
-        public bool MoveTo(int x, int y)
+        public bool MoveTo(short x, short y)
         {
             if (_IsSmoothMoving) return false;
-            if (x == _x && y == _y) return true;
+            if (x == _location.X && y == _location.Y) return true;
 
             //_SmoothMove_StoryBoard.Stop();
-            if (x > _x && y > _y)
+            if (x > _location.X && y > _location.Y)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x++; _y++; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X++; _location.Y++; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
                 this.Orientation = TileOrientations.RightBottom;
             }
-            else if (x < _x && y < _y)
+            else if (x < _location.X && y < _location.Y)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x--; _y--; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X--; _location.Y--; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
                 this.Orientation = TileOrientations.LeftTop;
             }
-            else if (x > _x && y < _y)
+            else if (x > _location.X && y < _location.Y)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x++; _y--; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X++; _location.Y--; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
                 this.Orientation = TileOrientations.RightTop;
             }
-            else if (x < _x && y > _y)
+            else if (x < _location.X && y > _location.Y)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x--; _y++; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X--; _location.Y++; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
                 this.Orientation = TileOrientations.LeftBottom;
             }
-            else if (x < _x)
+            else if (x < _location.X)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x--;
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X--;
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
                 this.Orientation = TileOrientations.Left;
             }
-            else if (x > _x)
+            else if (x > _location.X)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x++;
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X++;
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
                 this.Orientation = TileOrientations.Right;
             }
-            else if (y < _y)
+            else if (y < _location.Y)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _y--; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.Y--; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
                 this.Orientation = TileOrientations.Top;
             }
-            else if (y > _y)
+            else if (y > _location.Y)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _y++; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.Y++; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
                 this.Orientation = TileOrientations.Bottom;
             }
 
@@ -363,72 +369,72 @@ namespace SLSnake.Elements
 
             if (_orientation == TileOrientations.RightBottom)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x++; _y++; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X++; _location.Y++; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
             }
             else if (this.Orientation == TileOrientations.LeftTop)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x--; _y--; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X--; _location.Y--; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
             }
             else if (this.Orientation == TileOrientations.RightTop)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x++; _y--; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X++; _location.Y--; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
 
             }
             else if (this.Orientation == TileOrientations.LeftBottom)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x--; _y++; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X--; _location.Y++; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
 
             }
             else if (this.Orientation == TileOrientations.Left)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x--;
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X--;
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
 
             }
             else if (this.Orientation == TileOrientations.Right)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _x++;
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.X++;
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
 
             }
             else if (this.Orientation == TileOrientations.Top)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _y--; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.Y--; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
 
             }
             else if (this.Orientation == TileOrientations.Bottom)
             {
-                _SmoothMove_X_KeyFrame_1.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_1.Value = _y * 24;
-                _y++; Canvas.SetZIndex(this, _y + Z);
-                _SmoothMove_X_KeyFrame_2.Value = _x * 24;
-                _SmoothMove_Y_KeyFrame_2.Value = _y * 24;
+                _SmoothMove_X_KeyFrame_1.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_1.Value = _location.Y * 24;
+                _location.Y++; Canvas.SetZIndex(this, _location.Y + Z);
+                _SmoothMove_X_KeyFrame_2.Value = _location.X * 24;
+                _SmoothMove_Y_KeyFrame_2.Value = _location.Y * 24;
 
             }
             _IsSmoothMoving = true;
