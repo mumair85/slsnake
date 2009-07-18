@@ -22,11 +22,6 @@ namespace SLSnake.Views
             Loaded += new RoutedEventHandler(CGame_Loaded);
         }
 
-        private void LayoutRoot_KeyDown(object sender, KeyEventArgs e)
-        {
-            Debug.WriteLine(e.Key.ToString());
-        }
-
         #region GameLoop
 
         #region GameLoop 相关
@@ -45,7 +40,7 @@ namespace SLSnake.Views
         void CGame_Loaded(object sender, RoutedEventArgs e)
         {
             #region GameLogic Init
-            _h = new GameLoopHandler(this.LayoutRoot, this._floor_canvas, this._food_canvas, this._snake_canvas);
+            _h = new GameLoopHandler(this, this.LayoutRoot, this._floor_canvas, this._food_canvas, this._snake_canvas);
             if (_h.Init()) return;
             #endregion
 
@@ -101,11 +96,6 @@ namespace SLSnake.Views
         }
 
         #endregion
-
-        private void ChildWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            Debug.WriteLine(e.Key.ToString());
-        }
     }
 
 
@@ -128,15 +118,16 @@ namespace SLSnake.Views
     public class GameLoopHandler : IGameLoopHandler
     {
         #region Constructor
-        public GameLoopHandler(Canvas baseCanvas, Canvas floorCanvas, Canvas foodCanvas, Canvas snakeCanvas)
+        public GameLoopHandler(Control kbCatcher, Canvas baseCanvas, Canvas floorCanvas, Canvas foodCanvas, Canvas snakeCanvas)
         {
+            this.KBCatcher = kbCatcher;
             this.BaseCanvas = baseCanvas;
             this.FloorCanvas = floorCanvas;
             this.FoodCanvas = foodCanvas;
             this.SnakeCanvas = snakeCanvas;
 
-            this.BaseCanvas.KeyDown += new KeyEventHandler(canvas_KeyDown);
-            this.BaseCanvas.KeyUp += new KeyEventHandler(canvas_KeyUp);
+            this.KBCatcher.KeyDown += new KeyEventHandler(canvas_KeyDown);
+            this.KBCatcher.KeyUp += new KeyEventHandler(canvas_KeyUp);
             this.BaseCanvas.MouseLeftButtonDown += new MouseButtonEventHandler(canvas_MouseLeftButtonDown);
             this.BaseCanvas.MouseLeftButtonUp += new MouseButtonEventHandler(canvas_MouseLeftButtonUp);
             this.BaseCanvas.MouseMove += new MouseEventHandler(canvas_MouseMove);
@@ -175,6 +166,8 @@ namespace SLSnake.Views
         #endregion
 
         #region Properties
+
+        public Control KBCatcher { get; private set; }
 
         public Canvas BaseCanvas { get; private set; }
         public Canvas FloorCanvas { get; private set; }
@@ -280,8 +273,8 @@ namespace SLSnake.Views
             {
                 _body.Add(new SnakeTile(_h.SnakeCanvas)
                 {
-                    X = 10,
-                    Y = 2,
+                    X = 20,
+                    Y = (short)(10 - i),
                     Orientation = TileOrientations.Bottom
                 });
             }
@@ -339,15 +332,30 @@ namespace SLSnake.Views
                 head.Orientation = TileOrientations.Bottom;
             }
 
-            if (head.IsSmoothMoving) return;
             //if (!MoveCheck()) return;
 
-            // 前进
-            for (int i = 1; i < _body.Count; i++)
+            if (head.IsSmoothMoving)
             {
-                if (_body[i].Location != _body[i - 1].Location) _body[i].Go();
+                foreach (var body in _body) body.Go();
             }
-            head.Go();
+            else
+            {
+                for (int i = 1; i < _body.Count; i++)
+                {
+                    var current = _body[i];
+                    var previous = _body[i - 1];
+                    if (current.Location != previous.Location)
+                    {
+                        var a = current.Location;
+                        var b = previous.Location;
+                        if (a.X < b.X) current.Orientation = TileOrientations.Right;
+                        else if (a.X > b.X) current.Orientation = TileOrientations.Left;
+                        else if (a.Y < b.Y) current.Orientation = TileOrientations.Bottom;
+                        else if (a.Y > b.Y) current.Orientation = TileOrientations.Top;
+                    }
+                }
+                foreach (var body in _body) body.Go();
+            }
         }
         #endregion
     }
