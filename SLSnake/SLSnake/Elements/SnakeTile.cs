@@ -18,7 +18,7 @@ namespace SLSnake.Elements
         public SnakeTile(Canvas p) : base(p) { }
         public SnakeTile(Canvas p, double speedRatio) : base(p, speedRatio) { }
 
-        private static ImageBrush _ImageBrush = new ImageBrush()
+        private ImageBrush _ImageBrush = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri(@"/Images/player.png", UriKind.Relative)),
             AlignmentX = AlignmentX.Left,

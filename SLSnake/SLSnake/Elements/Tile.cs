@@ -289,12 +289,26 @@ namespace SLSnake.Elements
             }
             set
             {
+                //_lastLocation = value;
                 _location = value;
                 Canvas.SetLeft(this, _location.X * 24);
                 Canvas.SetTop(this, _location.Y * 24);
                 Canvas.SetZIndex(this, _location.Y);
             }
         }
+
+        //protected Location _lastLocation;
+        //public Location LastLocation
+        //{
+        //    get
+        //    {
+        //        return _lastLocation;
+        //    }
+        //    private set
+        //    {
+        //        _lastLocation = value;
+        //    }
+        //}
 
 
         /// <summary>
