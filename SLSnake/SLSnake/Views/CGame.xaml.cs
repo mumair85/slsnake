@@ -261,6 +261,8 @@ namespace SLSnake.Views
     #region Snake
     public partial class Snake : IGameLoopHandler
     {
+        private List<SnakeTile> _body = new List<SnakeTile>();
+
         private GameLoopHandler _h;
         public Snake(GameLoopHandler gl)
         {
@@ -282,21 +284,6 @@ namespace SLSnake.Views
             return false;
         }
         public bool Process()
-        {
-            Move();
-
-            return false;
-        }
-
-
-        private List<SnakeTile> _body = new List<SnakeTile>();
-        public enum SnakeOrientation
-        {
-            Up, Down, Left, Right
-        }
-
-        #region Move
-        public void Move()
         {
             var head = _body[0];
             if (_h.IsLeftKeyDown && _h.IsUpKeyDown)
@@ -332,8 +319,6 @@ namespace SLSnake.Views
                 head.Orientation = TileOrientations.Bottom;
             }
 
-            //if (!MoveCheck()) return;
-
             if (head.IsSmoothMoving)
             {
                 foreach (var body in _body) body.Go();
@@ -355,9 +340,21 @@ namespace SLSnake.Views
                     }
                 }
                 foreach (var body in _body) body.Go();
+
+                var foods = _h.Food;
+                var food = foods.Get(head.Location);
+                if (food != null)
+                {
+                    _body.Insert(0, new SnakeTile(_h.SnakeCanvas) { Location = head.Location, Orientation = head.Orientation });
+                    _body[0].Go();
+                    foods.Eat(food);
+                    foods.Grow(3);
+                }
+
+                if (_h.Floor.EatCheck(head.Location)) return true;
             }
+            return false;
         }
-        #endregion
     }
     #endregion
 
@@ -382,7 +379,7 @@ namespace SLSnake.Views
                     _spaces.Add(new Location { X = i, Y = j });
 
             // grow foods
-            Grow(100);
+            Grow(30);
 
             return false;
         }
@@ -510,7 +507,12 @@ namespace SLSnake.Views
             //}
             return false;
         }
+
+        public bool EatCheck(Location location)
+        {
+            foreach (var wall in _wall) if (wall.Location == location) return true;
+            return false;
+        }
     }
     #endregion
 }
-
