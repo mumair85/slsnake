@@ -398,7 +398,7 @@ namespace SLSnake.Views
             {
                 foreach (var location in _spaces)
                 {
-                    _foods.Add(new FoodTile(_h.FoodCanvas) { Location = location });
+                    _foods.Add(new FoodTile(_h.FoodCanvas) { Location = location, Opacity = 0.5 });
                 }
                 _spaces.Clear();
             }
@@ -409,7 +409,7 @@ namespace SLSnake.Views
                     var idx = _rnd.Next(_spaces.Count);
                     var location = _spaces[idx];
                     _spaces.RemoveAt(idx);
-                    _foods.Add(new FoodTile(_h.FoodCanvas) { Location = location });
+                    _foods.Add(new FoodTile(_h.FoodCanvas) { Location = location, Opacity = 0.5 });
                 }
             }
         }
