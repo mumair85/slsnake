@@ -42,5 +42,17 @@ namespace SLSnake.Elements
             }
         }
 
+        /// <summary>
+        /// 返回 story board 的移动动画播放情况　（是否停止）
+        /// </summary>
+        public bool IsSmoothMoving
+        {
+            get
+            {
+                return _IsSmoothMoving;
+                //return _FrameAnim_StoryBoard.GetCurrentState() != ClockState.Stopped;
+            }
+        }
+
     }
 }

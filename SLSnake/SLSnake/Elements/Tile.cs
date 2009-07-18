@@ -388,14 +388,14 @@ namespace SLSnake.Elements
         /// <summary>
         /// 按照当前人物方向前进 step 格
         /// </summary>
-        public virtual void Move(int step)
+        public virtual void Go(int step)
         {
         }
 
         /// <summary>
         /// 按照当前人物方向前进 1 格
         /// </summary>
-        public virtual void Move()
+        public virtual void Go()
         {
             if (_IsSmoothMoving) return;
             //todo 判断是否能够移动
