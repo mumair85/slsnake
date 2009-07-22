@@ -43,7 +43,7 @@ namespace SLSnake.Elements
         }
 
         /// <summary>
-        /// 返回 story board 的移动动画播放情况　（是否停止）
+        /// if storyboard running, return true
         /// </summary>
         public bool IsSmoothMoving
         {
