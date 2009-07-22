@@ -13,9 +13,6 @@ using System.Runtime.InteropServices;
 
 namespace SLSnake.Elements
 {
-    /// <summary>
-    /// Tile 面对的方向
-    /// </summary>
     public enum TileOrientations : int
     {
         Unknown = 0,
@@ -24,26 +21,23 @@ namespace SLSnake.Elements
         LeftBottom, Bottom, RightBottom
     }
 
-    /// <summary>
-    /// 表示一个地图的整数坐标 X, Y
-    /// </summary>
     [StructLayout(LayoutKind.Explicit, Size = 4, CharSet = CharSet.Ansi)]
     public struct Location
     {
         /// <summary>
-        /// 横坐标+纵坐标 (4 bytes)
+        /// X + Y (4 bytes)
         /// </summary>
         [FieldOffset(0)]
         public uint XY;
 
         /// <summary>
-        /// 横坐标 (2 bytes)
+        /// X (2 bytes)
         /// </summary>
         [FieldOffset(0)]
         public short X;
 
         /// <summary>
-        /// 纵坐标 (2 bytes)
+        /// Y (2 bytes)
         /// </summary>
         [FieldOffset(2)]
         public short Y;
@@ -73,11 +67,11 @@ namespace SLSnake.Elements
     }
 
     /// <summary>
-    /// 1x1的 Tile基类
+    /// 1x1 Base Tile
     /// </summary>
     public class Tile : Canvas
     {
-        #region FrameAnimation 相关
+        #region FrameAnimation
 
         protected Storyboard _FrameAnim_StoryBoard = new Storyboard();
         protected DoubleAnimationUsingKeyFrames _FrameAnim_KeyFrames = new DoubleAnimationUsingKeyFrames() { AutoReverse = true, RepeatBehavior = RepeatBehavior.Forever };
@@ -93,7 +87,7 @@ namespace SLSnake.Elements
 
         #endregion
 
-        #region SmoothMove 相关
+        #region SmoothMove
 
         protected Storyboard _SmoothMove_StoryBoard = new Storyboard();
 
@@ -110,26 +104,23 @@ namespace SLSnake.Elements
         #region Constructor
 
         /// <summary>
-        /// 父容器
+        /// controls container
         /// </summary>
-        protected Canvas _page = null;
+        protected Canvas _canvas = null;
 
         public Tile(Canvas container)
             : base()
         {
-            //指向父容器
-            _page = container;
-
-            //添加到容器
+            // store, locate
+            _canvas = container;
             container.Children.Add(this);
 
-            //定义宽高，裁减区域
-
+            // set width, height, clip area
             this.Clip = _FrameAnim_RectangleGeometry;
             this.Height = 24;
             this.Width = 24;
 
-            //准备 FrameAnimation StoryBoard
+            // init FrameAnimation StoryBoard
 
             this.Resources.Add("FrameAnimation", _FrameAnim_StoryBoard);
             _FrameAnim_StoryBoard.Children.Add(_FrameAnim_KeyFrames);
@@ -142,12 +133,12 @@ namespace SLSnake.Elements
             Storyboard.SetTarget(_FrameAnim_KeyFrames, _FrameAnim_TranslateTransform);
             Storyboard.SetTargetProperty(_FrameAnim_KeyFrames, new PropertyPath("X"));
 
-            //准备 FrameAnimation 刷子
+            // init FrameAnimation brush
 
             this.Background = _FrameAnim_ImageBrush;
             _FrameAnim_ImageBrush.Transform = _FrameAnim_TranslateTransform;
 
-            //准备 SmoothMove StoryBoard
+            // init SmoothMove StoryBoard
 
             this.Resources.Add("SmoothMove", _SmoothMove_StoryBoard);
             _SmoothMove_StoryBoard.Children.Add(_SmoothMove_X_KeyFrames);
@@ -188,13 +179,10 @@ namespace SLSnake.Elements
 
         #region Orientation
 
-        /// <summary>
-        /// Tile面对的方向（默认向下)
-        /// </summary>
         protected TileOrientations _orientation;
 
         /// <summary>
-        /// Tile面对的方向
+        /// tile's orientation (default: bottom)
         /// </summary>
         public virtual TileOrientations Orientation
         {
@@ -289,7 +277,6 @@ namespace SLSnake.Elements
             }
             set
             {
-                //_lastLocation = value;
                 _location = value;
                 Canvas.SetLeft(this, _location.X * 24);
                 Canvas.SetTop(this, _location.Y * 24);
@@ -297,22 +284,10 @@ namespace SLSnake.Elements
             }
         }
 
-        //protected Location _lastLocation;
-        //public Location LastLocation
-        //{
-        //    get
-        //    {
-        //        return _lastLocation;
-        //    }
-        //    private set
-        //    {
-        //        _lastLocation = value;
-        //    }
-        //}
 
 
         /// <summary>
-        /// 如果已经移到 x,y 则返回 true 否则移动１格并返回 false	//todo:寻路
+        /// if has been moved to target location, return true; else go(1) and return false
         /// </summary>
         public bool MoveTo(short x, short y)
         {
@@ -400,19 +375,11 @@ namespace SLSnake.Elements
 
 
         /// <summary>
-        /// 按照当前人物方向前进 step 格
-        /// </summary>
-        public virtual void Go(int step)
-        {
-        }
-
-        /// <summary>
-        /// 按照当前人物方向前进 1 格
+        /// forward 1 cell
         /// </summary>
         public virtual void Go()
         {
             if (_IsSmoothMoving) return;
-            //todo 判断是否能够移动
 
             if (_orientation == TileOrientations.RightBottom)
             {

@@ -43,7 +43,7 @@ namespace SLSnake.Elements
         }
 
         /// <summary>
-        /// 地板的方向需要特殊实现  // todo
+        /// // todo
         /// </summary>
         public override TileOrientations Orientation
         {

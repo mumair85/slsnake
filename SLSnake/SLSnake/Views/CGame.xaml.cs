@@ -24,14 +24,14 @@ namespace SLSnake.Views
 
         #region GameLoop
 
-        #region GameLoop 相关
-        int _NumTicksPerLoop = 10;	//一秒２０次
+        #region GameLoop
+        int _NumTicksPerLoop = 10;
         int _TickCount, _TickCountElapsed;
         bool _IsProcessCalled = false;
         #endregion
 
-        #region FPS 显示相关
-        TextBlock _FPS_TextBlock = new TextBlock() { Foreground = new SolidColorBrush(Color.FromArgb(0xff, 0xff, 0, 0)) };
+        #region FPS display
+        TextBlock _FPS_TextBlock = new TextBlock() { Foreground = new SolidColorBrush(Color.FromArgb(0xff, 0xff, 0, 0)), FontSize = 16.0 };
         int _FrameRate, _LastTime;
         #endregion
 
@@ -44,14 +44,14 @@ namespace SLSnake.Views
             if (_h.Init()) return;
             #endregion
 
-            #region FPS 显示相关
+            #region FPS
             this.LayoutRoot.Children.Add(_FPS_TextBlock);
             Canvas.SetLeft(_FPS_TextBlock, 10);
             Canvas.SetTop(_FPS_TextBlock, 10);
             Canvas.SetZIndex(_FPS_TextBlock, 99999);
             #endregion
 
-            #region GameLoop 相关
+            #region GameLoop
             var sb = new Storyboard();
             sb.Completed += new EventHandler(sb_Completed);
             sb.Begin();
@@ -60,7 +60,7 @@ namespace SLSnake.Views
 
         void sb_Completed(object sender, EventArgs e)
         {
-            #region FPS 显示相关
+            #region FPS
             if (_LastTime > DateTime.Now.Millisecond)
             {
 
@@ -103,12 +103,12 @@ namespace SLSnake.Views
     public interface IGameLoopHandler
     {
         /// <summary>
-        /// 进入游戏循环前的初始化，返回 true 表示中断操作
+        /// return True to break
         /// </summary>
         bool Init();
 
         /// <summary>
-        /// 每个游戏循环的被调函数，返回 true 表示中断操作
+        /// return True to break
         /// </summary>
         bool Process();
     }
@@ -198,7 +198,7 @@ namespace SLSnake.Views
 
         private void canvas_KeyDown(object sender, KeyEventArgs e)
         {
-            // 因为不可以支持　斜向跑动，此处做 互斥操作，只认最后按下的 方向键
+            // this game only support 4-way orientation, so ....
 
             if (e.Key == Key.A)
             {
@@ -270,7 +270,8 @@ namespace SLSnake.Views
         }
         public bool Init()
         {
-            // todo
+            // todo: custom length, location
+
             for (int i = 0; i < 7; i++)
             {
                 _body.Add(new SnakeTile(_h.SnakeCanvas)
@@ -392,7 +393,7 @@ namespace SLSnake.Views
         }
 
         /// <summary>
-        /// 随机生出 num 个食物（同步 _spaces）
+        /// rand create some foods ( sync _spaces )
         /// </summary>
         public void Grow(int num)
         {
@@ -419,7 +420,7 @@ namespace SLSnake.Views
         }
 
         /// <summary>
-        /// 吃掉一个食物（同步 _spaces)
+        /// remove food from foods ( sync _spaces )
         /// </summary>
         public void Eat(FoodTile food)
         {
@@ -429,7 +430,7 @@ namespace SLSnake.Views
         }
 
         /// <summary>
-        /// 判断一个坐标点是否有食物并返回
+        /// check location food exists
         /// </summary>
         public FoodTile Get(Location location)
         {
@@ -438,7 +439,7 @@ namespace SLSnake.Views
         }
 
         /// <summary>
-        /// 原地转圈
+        /// turn around (always)
         /// </summary>
         public bool Process()
         {
@@ -488,7 +489,7 @@ namespace SLSnake.Views
 
         public bool Init()
         {
-            // 初始化 地板 和 墙
+            // init  floor & wall
             for (short i = 0; i < _h.MapWidth; i++)
             {
                 for (short j = 0; j < _h.MapHeight; j++)
