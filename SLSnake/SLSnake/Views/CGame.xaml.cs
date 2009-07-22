@@ -200,22 +200,22 @@ namespace SLSnake.Views
         {
             // this game only support 4-way orientation, so ....
 
-            if (e.Key == Key.A)
+            if (e.Key == Key.Left)
             {
                 IsLeftKeyDown = true;
                 IsDownKeyDown = IsRightKeyDown = IsUpKeyDown = false;
             }
-            else if (e.Key == Key.S)
+            else if (e.Key == Key.Down)
             {
                 IsDownKeyDown = true;
                 IsLeftKeyDown = IsRightKeyDown = IsUpKeyDown = false;
             }
-            else if (e.Key == Key.D)
+            else if (e.Key == Key.Right)
             {
                 IsRightKeyDown = true;
                 IsLeftKeyDown = IsDownKeyDown = IsUpKeyDown = false;
             }
-            else if (e.Key == Key.W)
+            else if (e.Key == Key.Up)
             {
                 IsUpKeyDown = true;
                 IsLeftKeyDown = IsDownKeyDown = IsRightKeyDown = false;
