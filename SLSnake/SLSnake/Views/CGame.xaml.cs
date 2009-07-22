@@ -25,7 +25,7 @@ namespace SLSnake.Views
         #region GameLoop
 
         #region GameLoop 相关
-        int _NumTicksPerLoop = 50;	//一秒２０次
+        int _NumTicksPerLoop = 10;	//一秒２０次
         int _TickCount, _TickCountElapsed;
         bool _IsProcessCalled = false;
         #endregion
@@ -157,9 +157,9 @@ namespace SLSnake.Views
         #region Process
         public bool Process()
         {
-            this.Snake.Process();
-            this.Food.Process();
-            this.Floor.Process();
+            if (this.Snake.Process()) return true;
+            if (this.Food.Process()) return true;
+            if (this.Floor.Process()) return true;
 
             return false;
         }
@@ -339,19 +339,26 @@ namespace SLSnake.Views
                         else if (a.Y > b.Y) current.Orientation = TileOrientations.Top;
                     }
                 }
-                foreach (var body in _body) body.Go();
+
+                var nextLocation = head.GetNextLocation();
 
                 var foods = _h.Food;
-                var food = foods.Get(head.Location);
-                if (food != null)
+                var food = foods.Get(nextLocation);
+                while (food != null)
                 {
-                    _body.Insert(0, new SnakeTile(_h.SnakeCanvas) { Location = head.Location, Orientation = head.Orientation });
-                    _body[0].Go();
+                    _body.Insert(0, new SnakeTile(_h.SnakeCanvas) { Location = nextLocation, Orientation = head.Orientation });
                     foods.Eat(food);
                     foods.Grow(3);
+                    nextLocation = _body[0].GetNextLocation();
+                    food = foods.Get(nextLocation);
                 }
 
-                if (_h.Floor.EatCheck(head.Location)) return true;
+                var blocks = _h.Floor;
+
+                if (!blocks.EatCheck(nextLocation))
+                {
+                    foreach (var body in _body) body.Go();
+                }
             }
             return false;
         }
