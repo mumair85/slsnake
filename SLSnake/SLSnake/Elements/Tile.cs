@@ -488,6 +488,40 @@ namespace SLSnake.Elements
             _SmoothMove_StoryBoard.Begin();
         }
 
+
+        public Location GetNextLocation()
+        {
+            switch (this.Orientation)
+            {
+                case TileOrientations.Bottom:
+                    return new Location { X = (short)(this.Location.X + 0), Y = (short)(this.Location.Y + 1) };
+                    break;
+                case TileOrientations.Left:
+                    return new Location { X = (short)(this.Location.X - 1), Y = (short)(this.Location.Y + 0) };
+                    break;
+                case TileOrientations.LeftBottom:
+                    return new Location { X = (short)(this.Location.X - 1), Y = (short)(this.Location.Y + 1) };
+                    break;
+                case TileOrientations.LeftTop:
+                    return new Location { X = (short)(this.Location.X - 1), Y = (short)(this.Location.Y - 1) };
+                    break;
+                case TileOrientations.Right:
+                    return new Location { X = (short)(this.Location.X + 1), Y = (short)(this.Location.Y + 0) };
+                    break;
+                case TileOrientations.RightBottom:
+                    return new Location { X = (short)(this.Location.X + 1), Y = (short)(this.Location.Y + 1) };
+                    break;
+                case TileOrientations.RightTop:
+                    return new Location { X = (short)(this.Location.X + 1), Y = (short)(this.Location.Y - 1) };
+                    break;
+                case TileOrientations.Top:
+                    return new Location { X = (short)(this.Location.X + 0), Y = (short)(this.Location.Y - 1) };
+                    break;
+                default:
+                    return this.Location;
+            }
+        }
+
         #endregion
 
         #region Process
